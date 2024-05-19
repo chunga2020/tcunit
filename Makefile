@@ -15,7 +15,7 @@ TESTS=$(patsubst %.c,%,$(TEST_SRC))
 PROGRAM_SRC=$(wildcard $(BIN)/*.c)
 PROGRAMS=$(patsubst %.c,%,$(PROGRAM_SRC))
 
-TARGET=build/libYOUR_LIBRARY.a
+TARGET=build/libtcunit.a
 SO_TARGET=$(patsubst %.a,%.so,$(TARGET))
 
 # the target build
