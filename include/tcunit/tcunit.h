@@ -43,38 +43,24 @@ typedef struct result {
 /* ################################ Globals ################################# */
 
 /* Total tests run */
-int tc_tests_run = 0;
+extern int tc_tests_run;
 /* Total tests passed */
-int tc_tests_passed = 0;
+extern int tc_tests_passed;
 /* Total tests failed */
-int tc_tests_failed = 0;
+extern int tc_tests_failed;
 
 
 
-/* ########################## Function-like macros ########################## */
-
-/* ## Function-like macros */
+/* ################################ Functions ############################### */
 
 /*
  * A tcunit test case.
  *
  * name: the name of the test.
+ * f: the address of the test function.
  * setup: a pointer to the test case's setup function.  May be NULL.
  * teardown: a pointer to the test case's teardown function.  May be NULL.
  */
-#define Test(name, setup, teardown) {\
-    if ((setup) != NULL) {\
-        (setup)();\
-    }\
-    fprintf(stderr, "Running test %s:\n", (name));\
-    tc_Result result = (name)();                   \
-    if ((teardown) != NULL) {\
-        (teardown)();\
-    }\
-    if (result.code == TC_FAIL) {\
-        fprintf(stderr, "\nFAIL: %s: %s\n", name, result.message);\
-        return result.code;\
-    }\
-}
+tc_result_code Test(char *name, tc_Result (*f)(void), tc_setup setup, tc_teardown teardown);
 
 #endif
