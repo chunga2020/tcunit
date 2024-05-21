@@ -19,10 +19,10 @@ tc_result_code Test(char *name, tc_Result (*f)(void), tc_setup setup, tc_teardow
     tc_result_code rc = result.code;
 
     if (rc == TC_FAIL) {
-        fprintf(stderr, "\nFAIL: %s: %s\n", name, result.message);
+        fprintf(stderr, "FAIL: %s: %s\n", name, result.message);
         tc_tests_failed++;
     } else {
-        fprintf(stderr, " PASS\n");
+        fprintf(stderr, "PASS\n");
         tc_tests_passed++;
     }
 
