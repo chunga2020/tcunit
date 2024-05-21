@@ -50,8 +50,44 @@ extern int tc_tests_passed;
 extern int tc_tests_failed;
 
 
-
 /* ################################ Functions ############################### */
+
+/*
+ * Helper macro for creating asserts.
+ *
+ * Parameters:
+ * test: the condition to test.
+ * res: a tc_Result struct holding the test result.
+ * fmt: the printf-style format string to print.
+ * ...: the arguments to fmt.
+ *
+ * Notes:
+ * The maximum length of fmt, after printf construction is TC_MESSAGE_MAX bytes.
+ * Truncation will occur if the string is longer than that.
+ *
+ * The return statement ensures that a failing test bails out immediately, so it
+ * is clear precisely what failed.  Cleanup may be achieved by employing a
+ * teardown function in the test case.
+ */
+#define __tc_assert(test, res, fmt, ...) {    \
+        if (!(test)) {\
+            res.code = TC_FAIL;\
+            snprintf(res.message, TC_MESSAGE_MAX, fmt, ##__VA_ARGS__);\
+        }\
+        return res;\
+    }
+
+/*
+ * Macro for asserts.
+ *
+ * Parameters:
+ * test: the condition to test.
+ * fmt: the printf-style format string to print if the test fails.
+ * ...: the arguments to fmt.
+ */
+#define tc_assert(test, fmt, ...) {\
+        __tc_assert(test, result, fmt, ##__VA_ARGS__);\
+    }
 
 /*
  * A tcunit test case.
