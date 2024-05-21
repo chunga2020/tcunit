@@ -1,70 +1,107 @@
-#include <errno.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
 #include <tcunit/tcunit.h>
 #include <tcunit/dbg.h>
 
-#include <tcunit/tests/math.h>
+#define MAXNAME 32
 
-tc_Result test_add()
+typedef struct Person {
+    char *name;
+    int age;
+    int height;
+    int weight;
+} Person;
+
+Person *person_create()
 {
-    tc_Result result = {.code = TC_OK};
+    Person *p = calloc(1, sizeof(Person));
 
-    int a = 5;
-    int b = 5;
-    int expect = 10;
-    int actual = add(a, b);
-
-    tc_assert(actual == expect,
-              "Adding %d and %d failed.  Expected %d.  Actual %d",
-              a, b, expect, actual);
-
-    return result;
+    return p;
 }
 
-tc_Result test_add_fail()
+int person_init(Person *p, char *name, int age, int height, int weight)
 {
-    tc_Result result = {.code=TC_OK};
+    check(p != NULL, "NULL Person pointer");
 
-    int a = 5;
-    int b = 15;
-    int expect = 20;
-    int actual = add(a, b);
+    p->name = strndup(name, MAXNAME - 1);
+    p->age = age;
+    p->height = height;
+    p->weight = weight;
 
-    tc_assert(actual == expect,
-              "Adding %d and %d failed.  Expected %d.  Actual %d",
-              a, b, expect, actual);
-
-    return result;
+    return 0;
+ error:
+    return -1;
 }
 
-tc_Result test_divide_zero()
+void person_destroy(Person **p)
 {
-    tc_Result result = {.code = TC_OK};
-
-    int a = 15;
-    int b = 0;
-
-    tc_assert(divide(a, b) == EINVAL, "Dividing %d by %d should be caught",
-              a, b);
-
-    return result;
+    if (*p != NULL) {
+        if ((*p)->name != NULL) {
+            free((*p)->name);
+        }
+        free(*p);
+    }
 }
+
+/* ###### Test values ##### */
+
+Person *p;
+char *the_name = "Joe Schmoe";
+int age = 25;
+int height = 68; /* inches */
+int weight = 165; /* pounds */
+
+/* Test boilerplate stuff */
+
+char *message;
 
 void setup()
 {
-    debug("This is a setup function");
+    debug("Making a person");
+    p = person_create();
+    (void)person_init(p, the_name, age, height, weight);
 }
 
 void teardown()
 {
-    debug("This is a teardown function");
+    debug("Cleaning up the person");
+    person_destroy(&p);
+    p = NULL;
+}
+
+/* The tests */
+
+tc_result test_create()
+{
+    tc_assert((p = person_create()) != NULL, "Failed to create a person");
+
+    return TC_OK;
+}
+
+tc_result test_init()
+{
+    tc_assert(strncmp(p->name, the_name, MAXNAME) == 0,
+              "Expected name to be %s but was %s", the_name, p->name);
+    tc_assert(p->age == age,
+              "Expected %s's age to be %d but it was %d", p->name, age, p->age);
+    tc_assert(p->height == height,
+              "Expected his height to be %d but it was %d", p->height, height);
+    tc_assert(p->weight == weight,
+              "Expected his weight to be %d but it was %d", p->weight, weight);
+
+    return TC_OK;
 }
 
 int main(void)
 {
-    Test("test_add", test_add, NULL, NULL);
-    Test("test_add_fail", test_add_fail, NULL, NULL);
-    Test("test_divide_zero", test_divide_zero, setup, teardown);
+    tc_start();
+
+    Test("test_create", test_create, NULL, teardown);
+    Test("test_init", test_init, setup, teardown);
+
+    tc_finish();
 
     return tc_tests_passed != tc_tests_run;
 }
