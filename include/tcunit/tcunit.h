@@ -65,10 +65,12 @@ extern char *message;
         }\
     }
 
-#define TC_RUN_TESTS(tests) int main(void) {\
+#define TC_RUN_TESTS(tests) int main(int argc, char *argv[]) {       \
+        debug("%d", argc);\
         tc_start();\
         tc_result rc = tests();\
         tc_finish();\
+        tc_report(argv[0]);\
         exit((int)rc != 0);\
     }\
 
@@ -86,5 +88,13 @@ void tc_finish();
  * teardown: a pointer to the test case's teardown function.  May be NULL.
  */
 tc_result Test(char *name, tc_result (*f)(void), tc_setup setup, tc_teardown teardown);
+
+/*
+ * Print a summary of a test run.
+ *
+ * Parameters:
+ * name: the name of the test run
+ */
+void tc_report(char *name);
 
 #endif
