@@ -65,6 +65,13 @@ extern char *message;
         }\
     }
 
+#define TC_RUN_TESTS(tests) int main(void) {\
+        tc_start();\
+        tc_result rc = tests();\
+        tc_finish();\
+        exit((int)rc != 0);\
+    }\
+
 /* Sets up the framework. */
 void tc_start();
 
