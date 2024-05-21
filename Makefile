@@ -3,11 +3,13 @@ LIBS=-ld $(OPTLIBS)
 PREFIX?=/usr/local
 
 SRC=src
+INCLUDE=include
 TEST=tests
 BIN=bin
 
 SOURCES=$(wildcard $(SRC)/**/*.c $(SRC)/*.c)
 OBJECTS=$(patsubst %.c,%.o,$(SOURCES))
+HEADERS=$(wildcard $(INCLUDE)/**/*.h $(INCLUDE)/*.h)
 
 TEST_SRC=$(wildcard $(TEST)/*_tests.c)
 TESTS=$(patsubst %.c,%,$(TEST_SRC))
@@ -52,10 +54,11 @@ clean:
 # The install
 install: all
 	install -d $(DESTDIR)/$(PREFIX)/lib
+	install -d $(DESTDIR)/$(PREFIX)/include/tcunit
 	install $(TARGET) $(DESTDIR)/$(PREFIX)/lib
+	install $(HEADERS) $(DESTDIR)/$(PREFIX)/include/tcunit
 
 # The checker
 check:
 	@echo Files with potentially dangerous functions
-	@egrep '[^_.>a-zA-Z0-9](str(?ncpy|n?cat|xfrm|n?dup|str|pbrk|tok|_)|\
-		|stpn?cpy|a?sn?printf|byte_)' $(SOURCES) || true
+	grep -E '[^_.>a-zA-Z0-9](str(n?cpy|n?cat|xfrm|n?dup|str|pbrk|tok|_)|stpn?cpy|a?sn?printf|byte_)' $(SOURCES) || true
