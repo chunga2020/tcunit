@@ -25,19 +25,7 @@ typedef void (*tc_teardown)(void);
 typedef enum {
     TC_FAIL = -1,
     TC_OK = 0
-} tc_result_code;
-
-/*
- * Unit test result container.
- *
- * code: the tc_result_code.
- * message: the message to print, if any.
- */
-typedef struct result {
-    tc_result_code code;
-    char message[TC_MESSAGE_BUFSIZE];
-} tc_Result;
-
+} tc_result;
 
 
 /* ################################ Globals ################################# */
@@ -49,15 +37,16 @@ extern int tc_tests_passed;
 /* Total tests failed */
 extern int tc_tests_failed;
 
+extern char *message;
+
 
 /* ################################ Functions ############################### */
 
 /*
- * Helper macro for creating asserts.
+ * Macro for creating asserts.
  *
  * Parameters:
  * test: the condition to test.
- * res: a tc_Result struct holding the test result.
  * fmt: the printf-style format string to print.
  * ...: the arguments to fmt.
  *
@@ -69,25 +58,17 @@ extern int tc_tests_failed;
  * is clear precisely what failed.  Cleanup may be achieved by employing a
  * teardown function in the test case.
  */
-#define __tc_assert(test, res, fmt, ...) {    \
+#define tc_assert(test, fmt, ...) {    \
         if (!(test)) {\
-            res.code = TC_FAIL;\
-            snprintf(res.message, TC_MESSAGE_MAX, fmt, ##__VA_ARGS__);\
+            snprintf(message, TC_MESSAGE_MAX, fmt, ##__VA_ARGS__);\
+            return TC_FAIL;\
         }\
-        return res;\
     }
 
-/*
- * Macro for asserts.
- *
- * Parameters:
- * test: the condition to test.
- * fmt: the printf-style format string to print if the test fails.
- * ...: the arguments to fmt.
- */
-#define tc_assert(test, fmt, ...) {\
-        __tc_assert(test, result, fmt, ##__VA_ARGS__);\
-    }
+/* Sets up the framework. */
+void tc_start();
+
+void tc_finish();
 
 /*
  * A tcunit test case.
@@ -97,6 +78,6 @@ extern int tc_tests_failed;
  * setup: a pointer to the test case's setup function.  May be NULL.
  * teardown: a pointer to the test case's teardown function.  May be NULL.
  */
-tc_result_code Test(char *name, tc_Result (*f)(void), tc_setup setup, tc_teardown teardown);
+tc_result Test(char *name, tc_result (*f)(void), tc_setup setup, tc_teardown teardown);
 
 #endif
