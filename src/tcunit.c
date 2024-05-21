@@ -6,11 +6,11 @@ int tc_tests_failed = 0;
 
 
 tc_result_code Test(char *name, tc_Result (*f)(void), tc_setup setup, tc_teardown teardown) {
+    fprintf(stderr, "Running test %s:\n", (name));
     if (setup != NULL) {
         setup();
     }
-    fprintf(stderr, "Running test %s:", (name));
-    tc_Result result = (f)();
+    tc_Result result = f();
     tc_tests_run++;
     if (teardown != NULL) {
         teardown();
