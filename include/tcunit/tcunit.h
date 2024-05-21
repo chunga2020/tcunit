@@ -2,6 +2,9 @@
 #define tcunit_h
 
 #include <stdio.h>
+#include <stdlib.h>
+
+#include <tcunit/dbg.h>
 
 /* SPDX-License-Identifier: MIT */
 
@@ -65,15 +68,6 @@ extern char *message;
         }\
     }
 
-#define TC_RUN_TESTS(tests) int main(int argc, char *argv[]) {       \
-        debug("%d", argc);\
-        tc_start();\
-        tc_result rc = tests();\
-        tc_finish();\
-        tc_report(argv[0]);\
-        exit((int)rc != 0);\
-    }\
-
 /* Sets up the framework. */
 void tc_start();
 
@@ -96,5 +90,14 @@ tc_result Test(char *name, tc_result (*f)(void), tc_setup setup, tc_teardown tea
  * name: the name of the test run
  */
 void tc_report(char *name);
+
+#define TC_RUN_TESTS(tests) int main(int argc, char *argv[]) {       \
+        debug("%d", argc);\
+        tc_start();\
+        tc_result rc = tests();\
+        tc_finish();\
+        tc_report(argv[0]);\
+        exit((int)rc != 0);\
+    }
 
 #endif
