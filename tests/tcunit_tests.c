@@ -99,7 +99,7 @@ tc_result all_tests()
     Test("test_create", test_create, NULL, teardown);
     Test("test_init", test_init, setup, teardown);
 
-    return TC_OK;
+    return tc_tests_failed != 0;
 }
 
 TC_RUN_TESTS(all_tests)

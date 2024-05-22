@@ -47,7 +47,7 @@ tc_result all_tests()
     Test("test_name2", another_test_func, your_setup_func, your_teardown_func);
     // ...
     
-    return TC_OK;
+    return tc_tests_failed != 0;
 }
 ```
 
