@@ -10,8 +10,8 @@ make install
 ```
 
 This will build the library, run the tests, and install the library.  By
-default, the install location is `$PREFIX/lib`, with `$PREFIX` defaulting to
-`/usr/local/`.
+default, the install location is `$PREFIX/include` for the header and
+`$PREFIX/lib` for the library, with `$PREFIX` defaulting to `/usr/local/`.
 
 ## Usage
 
