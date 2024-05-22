@@ -100,8 +100,8 @@ int tc_report(char *name);
  * when the macro is expanded.  We need argc because we need the
  * (int argc, char *argv[]) form of main to get access to the executable name.
  */
-#define TC_RUN_TESTS(tests) int main(int argc, char *argv[]) {       \
-        char *message;\
+#define TC_RUN_TESTS(tests) char *message;\
+    int main(int argc, char *argv[]) {                          \
         fprintf(stderr, "----- Running: %s -----\n", argv[0]);\
         debug("%d", argc);\
         tc_start();\
