@@ -95,6 +95,7 @@ tc_result Test(char *name, tc_result (*f)(void), tc_setup setup, tc_teardown tea
 int tc_report(char *name);
 
 #define TC_RUN_TESTS(tests) int main(int argc, char *argv[]) {       \
+        char *message;\
         debug("%d", argc);\
         tc_start();\
         tests();\
