@@ -96,6 +96,7 @@ int tc_report(char *name);
 
 #define TC_RUN_TESTS(tests) int main(int argc, char *argv[]) {       \
         char *message;\
+        fprintf(stderr, "----- Running: %s -----\n", argv[0]);\
         debug("%d", argc);\
         tc_start();\
         tests();\
