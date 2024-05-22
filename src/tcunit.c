@@ -38,13 +38,17 @@ tc_result Test(char *name, tc_result (*f)(void), tc_setup setup, tc_teardown tea
     return rc;
 }
 
-void tc_report(char *name)
+int tc_report(char *name)
 {
     fprintf(stderr,
             "---- Summary: %s ----\n"
             "Tests run: %d\tPasses: %d\tFailures: %d\n", name, tc_tests_run,
             tc_tests_passed, tc_tests_failed);
+
     if (tc_tests_passed == tc_tests_run) {
         fprintf(stderr, "ALL TESTS PASSED\n");
+        return EXIT_SUCCESS;
+    } else {
+        return EXIT_FAILURE;
     }
 }

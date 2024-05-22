@@ -38,18 +38,18 @@ checks. `test` is the condition to check, and `fmt` and `...` are arguments to a
 typical `printf(3)`-style string.  This macro automatically handles returning a
 failure, marked with the macro `TC_FAIL`, if `test` evaluates to 0 or `false`.
 
-Finally, define a pseudo-test that looks like:
+Finally, define a test wrapper that looks like:
 
 ``` c
-tc_result all_tests()
+void all_tests()
 {
     Test("test_name1", test_func, your_setup_func, your_teardown_func);
     Test("test_name2", another_test_func, your_setup_func, your_teardown_func);
     // ...
-    
-    return tc_tests_failed != 0;
 }
 ```
+
+that contains all of your tests.
 
 The signature of `Test` is
 ```c
@@ -63,5 +63,5 @@ where
 * `setup` is a pointer to your setup fixture, or `NULL`
 * `teardown` is a pointer to your teardown fixture, or `NULL`
 
-Pass this pseudo-test into the `TC_RUN_TESTS` macro, which will take care of
-setup and teardown of the entire test module.
+Pass this wrapper into the `TC_RUN_TESTS` macro, which will take care of setup
+and teardown of the entire test module.

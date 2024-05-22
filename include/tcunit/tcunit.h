@@ -88,16 +88,18 @@ tc_result Test(char *name, tc_result (*f)(void), tc_setup setup, tc_teardown tea
  *
  * Parameters:
  * name: the name of the test run
+ *
+ * Return:
+ * On success, returns EXIT_SUCCESS.  On failure, returns EXIT_FAILURE.
  */
-void tc_report(char *name);
+int tc_report(char *name);
 
 #define TC_RUN_TESTS(tests) int main(int argc, char *argv[]) {       \
         debug("%d", argc);\
         tc_start();\
-        tc_result rc = tests();\
+        tests();\
         tc_finish();\
-        tc_report(argv[0]);\
-        exit((int)rc != 0);\
+        exit(tc_report(argv[0]));\
     }
 
 #endif

@@ -94,12 +94,10 @@ tc_result test_init()
     return TC_OK;
 }
 
-tc_result all_tests()
+void all_tests()
 {
     Test("test_create", test_create, NULL, teardown);
     Test("test_init", test_init, setup, teardown);
-
-    return tc_tests_failed != 0;
 }
 
 TC_RUN_TESTS(all_tests)
