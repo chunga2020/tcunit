@@ -94,6 +94,12 @@ tc_result Test(char *name, tc_result (*f)(void), tc_setup setup, tc_teardown tea
  */
 int tc_report(char *name);
 
+/*
+ * GCC outputs warnings about 'message' and 'argc' being unused.  These can
+ * safely be ignored.  The declaration of message is needed for the test files
+ * when the macro is expanded.  We need argc because we need the
+ * (int argc, char *argv[]) form of main to get access to the executable name.
+ */
 #define TC_RUN_TESTS(tests) int main(int argc, char *argv[]) {       \
         char *message;\
         fprintf(stderr, "----- Running: %s -----\n", argv[0]);\
