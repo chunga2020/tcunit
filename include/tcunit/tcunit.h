@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include <tcunit/dbg.h>
 
@@ -67,6 +68,53 @@ extern char *message;
             return TC_FAIL;\
         }\
     }
+
+/*
+ * Assert that two integers are equal.
+ *
+ * Parameters:
+ * expected: the expected value.
+ * actual: the actual value.
+ * expected_name: the name of the symbol holding the expected value.
+ * actual_name: the name of the symbol holding the actual value.
+ */
+#define tc_assert_int_eq(expected, actual, expected_name, actual_name) {    \
+    tc_assert((expected) == (actual),\
+              "Integers were not equal.\n\tExpected: %s=%d, actual: %s=%d",\
+              (expected_name), (expected), (actual_name), (actual))     \
+}
+
+/*
+ * Assert that two strings are equal.
+ *
+ * Parameters:
+ * expected: the expected value.
+ * actual: the actual value.
+ * expected_name: the name of the symbol holding the expected value.
+ * actual_name: the name of the symbol holding the actual value.
+ * maxlen: the maximum length to compare, as for strncmp(3)
+ */
+#define tc_assert_str_eq(expected, actual, expected_name, actual_name, maxlen) { \
+    tc_assert(strncmp((expected), (actual), (maxlen)) == 0,\
+              "Strings were not equal.\n\tExpected: %s=\"%s\", actual: \"%s=%s\"",\
+              (expected_name), (expected), (actual_name), (actual))     \
+}
+
+/*
+ * Assert that two booleans are equal.
+ *
+ * Parameters:
+ * expected: the expected value.
+ * actual: the actual value.
+ * expected_name: the name of the symbol holding the expected value.
+ * actual_name: the name of the symbol holding the actual value.
+ */
+#define tc_assert_bool_eq(expected, actual, expected_name, actual_name) {   \
+    tc_assert((expected) == (actual),\
+              "Booleans were not equal.\n\tExpected: %s=%s, actual: %s=%s",\
+              (expected_name), (expected) ? "true" : "false",       \
+              (actual_name), (actual) ? "true" : "false")            \
+}
 
 /* Sets up the framework. */
 void tc_start();

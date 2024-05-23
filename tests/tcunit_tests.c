@@ -1,3 +1,4 @@
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -92,10 +93,28 @@ tc_result test_init()
     return TC_OK;
 }
 
+tc_result test_type_eq()
+{
+    int x = 6;
+    int y = x * 2;
+    tc_assert_int_eq(12, y, "x", "y");
+
+    char *s1 = "Hello, world!";
+    char *s2 = "Hello, world!";
+    tc_assert_str_eq(s1, s2, "s1", "s2", MAXNAME);
+
+    bool b1 = true;
+    bool b2 = true;
+    tc_assert_bool_eq(b1, b2, "b1", "b2");
+
+    return TC_OK;
+}
+
 void all_tests()
 {
     Test("test_create", test_create, NULL, teardown);
     Test("test_init", test_init, setup, teardown);
+    Test("type assert macros", test_type_eq, NULL, NULL);
 }
 
 TC_RUN_TESTS(all_tests)
