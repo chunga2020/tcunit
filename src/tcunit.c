@@ -17,7 +17,7 @@ void tc_finish()
 }
 
 tc_result Test(char *name, tc_result (*f)(void), tc_setup setup, tc_teardown teardown) {
-    fprintf(stderr, "Running test %s:\n", (name));
+    fprintf(stderr, "Running test %s: ", (name));
     if (setup != NULL) {
         setup();
     }
@@ -28,7 +28,7 @@ tc_result Test(char *name, tc_result (*f)(void), tc_setup setup, tc_teardown tea
     }
 
     if (rc == TC_FAIL) {
-        fprintf(stderr, "FAIL: %s: %s\n", name, message);
+        fprintf(stderr, "FAILURE\n\t%s\n", message);
         tc_tests_failed++;
     } else {
         fprintf(stderr, "PASS\n");
