@@ -55,8 +55,6 @@ int weight = 165; /* pounds */
 
 /* Test boilerplate stuff */
 
-char *message;
-
 void setup()
 {
     debug("Making a person");
